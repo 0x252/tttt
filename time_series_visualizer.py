@@ -5,18 +5,21 @@ from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 
 # Import data (Make sure to parse dates. Consider setting index column to 'date'.)
-df = None
+df = pd.read_csv("fcc-forum-pageviews.csv", parse_dates=['date'], index_col='date')
 
 # Clean data
-df = None
-
+low = df['value'].quantile(0.025)
+high = df['value'].quantile(0.975)
+df = df[(df['value'] >= low) & (df['value'] <= high)]
 
 def draw_line_plot():
     # Draw line plot
-
-
-
-
+    fig,ax = plt.subplots(figsize=(12,6))
+    #ax.plot(df.cumsum(), c='red')
+    ax.plot(df, c='red')
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Page Views')
+    ax.set_title('Daily freeCodeCamp Forum Page Views 5/2016-12/2019')
 
     # Save image and return fig (don't change this part)
     fig.savefig('line_plot.png')
@@ -24,10 +27,16 @@ def draw_line_plot():
 
 def draw_bar_plot():
     # Copy and modify data for monthly bar plot
-    df_bar = None
-
+    df_bar = df.copy()
+    df_bar.reset_index(inplace=True)
+    df_bar['month'] = [d.strftime('%b') for d in df_bar.date]
+    df_bar['year'] = [d.year for d in df_bar.date]
     # Draw bar plot
-
+    fig,ax = plt.subplots(figsize=(12,6))
+    ax.bar(df_bar.date, df_bar['value'])
+    ax.set_xlabel('Years')
+    ax.set_ylabel('Average Page Views')
+    ax.set_title('Page views')
 
 
 
