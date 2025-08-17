@@ -62,15 +62,19 @@ def draw_box_plot():
 
     df_box['month'] = pd.Categorical(df_box['month'], categories=months_order, ordered=True)
     # Draw box plots (using Seaborn)
-    fig, (ax1, ax2) = plt.subplots(figsize=(12, 6), nrows=2)
-    
-    boxplot = sns.boxplot(data=df_box, x="year", y="value", ax=ax1)
-    ax1.set_xlabel('Year')
-    ax1.set_ylabel('Page Views')
-    fig = boxplot.get_figure()
-    boxplot1 = sns.boxplot(data=df_box, x="month", y="value", ax=ax2)
-    ax2.set_xlabel('Month')
-    ax2.set_ylabel('Page Views')
+    fig, (ax1, ax2) = plt.subplots(figsize=(12, 12), nrows=2)
+
+    # Year-wise box plot
+    sns.boxplot(data=df_box, x="year", y="value", ax=ax1)
+    ax1.set_title("Year-wise Box Plot (Trend)")
+    ax1.set_xlabel("Year")
+    ax1.set_ylabel("Page Views")
+
+    # Month-wise box plot
+    sns.boxplot(data=df_box, x="month", y="value", ax=ax2)
+    ax2.set_title("Month-wise Box Plot (Seasonality)")
+    ax2.set_xlabel("Month")
+    ax2.set_ylabel("Page Views")
 
 
     # Save image and return fig (don't change this part)
