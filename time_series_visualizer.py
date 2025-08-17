@@ -33,13 +33,17 @@ def draw_bar_plot():
     df_bar['year'] = [d.year for d in df_bar.date]
     # Draw bar plot
     fig,ax = plt.subplots(figsize=(12,6))
-    ax.bar(df_bar.date, df_bar['value'])
+    months_order = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+    df_bar['month'] = pd.Categorical(df_bar['month'], categories=months_order, ordered=True)
+
+    df_bar_grouped = df_bar.groupby(['year','month'])['value'].mean().unstack()
+    #df_bar.plot(kind='bar', ax=ax)
+    df_bar_grouped.plot(kind='bar',ax=ax)
     ax.set_xlabel('Years')
     ax.set_ylabel('Average Page Views')
     ax.set_title('Page views')
-
-
-
 
     # Save image and return fig (don't change this part)
     fig.savefig('bar_plot.png')
@@ -53,7 +57,7 @@ def draw_box_plot():
     df_box['month'] = [d.strftime('%b') for d in df_box.date]
 
     # Draw box plots (using Seaborn)
-
+    
 
 
 
