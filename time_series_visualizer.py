@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
+np.float = np.float16
 import seaborn as sns
 from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
@@ -29,12 +31,12 @@ def draw_bar_plot():
     # Copy and modify data for monthly bar plot
     df_bar = df.copy()
     df_bar.reset_index(inplace=True)
-    df_bar['month'] = [d.strftime('%b') for d in df_bar.date]
+    df_bar['month'] = [d.strftime('%B') for d in df_bar.date]
     df_bar['year'] = [d.year for d in df_bar.date]
     # Draw bar plot
     fig,ax = plt.subplots(figsize=(12,6))
-    months_order = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    months_order = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December']
 
     df_bar['month'] = pd.Categorical(df_bar['month'], categories=months_order, ordered=True)
 
@@ -55,11 +57,20 @@ def draw_box_plot():
     df_box.reset_index(inplace=True)
     df_box['year'] = [d.year for d in df_box.date]
     df_box['month'] = [d.strftime('%b') for d in df_box.date]
+    months_order = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
+    df_box['month'] = pd.Categorical(df_box['month'], categories=months_order, ordered=True)
     # Draw box plots (using Seaborn)
+    fig, (ax1, ax2) = plt.subplots(figsize=(12, 6), nrows=2)
     
-
-
+    boxplot = sns.boxplot(data=df_box, x="year", y="value", ax=ax1)
+    ax1.set_xlabel('Year')
+    ax1.set_ylabel('Page Views')
+    fig = boxplot.get_figure()
+    boxplot1 = sns.boxplot(data=df_box, x="month", y="value", ax=ax2)
+    ax2.set_xlabel('Month')
+    ax2.set_ylabel('Page Views')
 
 
     # Save image and return fig (don't change this part)
